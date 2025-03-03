@@ -120,6 +120,7 @@ for epoch in range(num_epochs):
         total_loss += loss.item()
     if (epoch+1) % 5 == 0:
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {total_loss / len(train_loader):.4f}')
+torch.save(model.state_dict(), '../addition_model.pth')
 
 # Evaluate
 def evaluate(model, loader, max_length=10):

@@ -1,0 +1,1 @@
+A collection of Transformer and RNN-based Seq2Seq models for arithmetic operations (addition, subtraction, multiplication, and division). Includes scripts, training data generation, and evaluation tools to showcase model performance and facilitate further experimentation.

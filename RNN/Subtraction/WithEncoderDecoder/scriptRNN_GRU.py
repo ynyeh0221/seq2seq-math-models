@@ -8,7 +8,8 @@ from torch.utils.data import DataLoader, Dataset
 import random
 
 # Device configuration
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+print(f"Current using device：{device}")
 
 # Special tokens
 PAD, SOS, EOS = '<pad>', '<sos>', '<eos>'

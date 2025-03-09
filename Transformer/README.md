@@ -73,19 +73,19 @@ The division model learns to predict the quotient of two numbers.
 - Output format: `c` (where `c = a / b`, rounded to specified decimal places)
 - Examples: `10/2=` → `5`
 
-## Transfer Learning Model
+## Migration Learning Model
 
-The transfer learning model combines knowledge from all four operation models to create a single model that can handle any of the basic arithmetic operations.
+The migration learning model combines knowledge from all four operation models to create a single model that can handle any of the basic arithmetic operations.
 
-- Input format: `a+b=`, `a-b=`, `a*b=`, or `a/b=`
+- Input format: `a+b=`, `a-b=`, `axb=`, or `a/b=` (using 'x' for multiplication)
 - Output format: The result of the specified operation
-- Training approach: Initializes with weights from pre-trained individual models and fine-tunes on a combined dataset
+- Training approach: Initializes with averaged weights from pre-trained individual models and fine-tunes on a combined dataset with all operations
 
 ```python
-# Example usage of the combined model
-model = TransformerModel(vocab_size=len(tokenizer.vocab), embed_dim=128, num_heads=4)
-model.load_state_dict(torch.load('models/combined_model.pth'))
-# Can predict any of: 25+37=, 43-21=, 6*7=, 10/2=
+# Example usage of the migration learning model
+model = TransformerModel(vocab_size=len(tokenizer.vocab), embed_dim=128, num_heads=4, num_layers=4)
+model.load_state_dict(torch.load('models/migration_model.pth'))
+# Can predict any of: 25+37=, 43-21=, 6x7=, 10/2=
 ```
 
 ## Training Process
@@ -115,16 +115,17 @@ Input: 57+28= Predicted: 85 True: 85
 Input: 64+39= Predicted: 103 True: 103
 ```
 
-## Transfer Learning Approach
+## Migration Learning Approach
 
-The transfer learning script:
-1. Loads the pre-trained weights from each individual operation model
-2. Creates a new model with a shared architecture
-3. Initializes the new model with averaged weights from the individual models
-4. Fine-tunes on a combined dataset containing all four operations
-5. Saves the resulting model that can handle multiple operations
+The migration learning script:
+1. Loads the pre-trained weights from each of the four operation models (addition, subtraction, multiplication, and division)
+2. Creates a new model with a shared architecture and increased number of layers (4 instead of 3)
+3. Calculates the average weights from all four models for each parameter
+4. Initializes the new model with these averaged weights
+5. Fine-tunes on a combined dataset containing all four operations
+6. Saves the resulting model that can handle multiple operations
 
-This approach allows the model to benefit from the specialized knowledge of each individual model while learning to distinguish between different operations.
+This averaging approach allows the model to begin training with a good initialization that incorporates knowledge from all four individual models, making the learning process more efficient and potentially improving overall performance.
 
 ## Usage Examples
 
